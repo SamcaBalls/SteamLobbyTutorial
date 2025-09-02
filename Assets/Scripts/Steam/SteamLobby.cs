@@ -50,7 +50,7 @@ namespace SteamLobbyTutorial
 
         public void HostLobby()
         {
-            SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, networkManager.maxConnections);
+            SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, networkManager.maxConnections);
         }
 
         void OnLobbyCreated(LobbyCreated_t callback)
@@ -65,6 +65,8 @@ namespace SteamLobbyTutorial
             networkManager.StartHost();
 
             SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAddressKey, SteamUser.GetSteamID().ToString());
+
+            SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "game_id", "xXBallerXx");
             lobbyID = callback.m_ulSteamIDLobby;
         }
 
