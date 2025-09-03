@@ -145,8 +145,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8488278243615874005}
-  - component: {fileID: 8510703365055150100}
   - component: {fileID: 821926361365460976}
+  - component: {fileID: -5276073921977131141}
   m_Layer: 5
   m_Name: PlayerLobbySlot
   m_TagString: Untagged
@@ -175,23 +175,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 700, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &8510703365055150100
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4650272539521798688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneId: 0
-  _assetId: 268870563
-  serverOnly: 0
-  visibility: 0
-  hasSpawned: 0
 --- !u!114 &821926361365460976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,6 +193,23 @@ MonoBehaviour:
   isReady: 0
   readyButton: {fileID: 2197738865964814976}
   nameText: {fileID: 4338961532300200717}
+--- !u!114 &-5276073921977131141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4650272539521798688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  _assetId: 268870563
+  serverOnly: 0
+  visibility: 0
+  hasSpawned: 0
 --- !u!1 &6414244436462258609
 GameObject:
   m_ObjectHideFlags: 0
