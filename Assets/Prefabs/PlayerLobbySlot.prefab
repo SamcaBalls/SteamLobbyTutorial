@@ -145,8 +145,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8488278243615874005}
-  - component: {fileID: 1897808588019485040}
   - component: {fileID: 8510703365055150100}
+  - component: {fileID: 5089347718375762130}
   m_Layer: 5
   m_Name: PlayerLobbySlot
   m_TagString: Untagged
@@ -175,24 +175,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 700, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1897808588019485040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4650272539521798688}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 239096976f5d59d47a719f172cc082b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
-  isReady: 0
-  readyButton: {fileID: 2197738865964814976}
-  nameText: {fileID: 4338961532300200717}
 --- !u!114 &8510703365055150100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,6 +192,19 @@ MonoBehaviour:
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
+--- !u!114 &5089347718375762130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4650272539521798688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d12baacc9be38ba45bf142462fed7f17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lobbyNameText: {fileID: 6440252581200154542}
 --- !u!1 &6414244436462258609
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,9 +326,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1897808588019485040}
-        m_TargetAssemblyTypeName: SteamLobbyTutorial.PlayerLobbyHandler, Assembly-CSharp
-        m_MethodName: OnReadyButtonClicked
+      - m_Target: {fileID: 5089347718375762130}
+        m_TargetAssemblyTypeName: LobbyPreviewUI, Assembly-CSharp
+        m_MethodName: OnJoinClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

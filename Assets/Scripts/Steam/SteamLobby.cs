@@ -35,7 +35,7 @@ namespace SteamLobbyTutorial
 
         void Start()
         {
-            networkManager = GetComponent<NetworkManager>();
+            networkManager = GetComponentInParent<NetworkManager>();
             if (!SteamManager.Initialized)
             {
                 Debug.LogError("Steam is not initalized. Make sure to run this game in the steam environment");
