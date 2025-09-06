@@ -1,20 +1,55 @@
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Mirror;
+using UnityEngine.InputSystem;
 
 namespace SteamLobbyTutorial
 {
     public class PlayerMovementHandler : NetworkBehaviour
     {
-        void Update()
+        [Header("Input")]
+        [SerializeField] private InputActionReference move;
+
+        [Header("Movement Settings")]
+        [SerializeField] private float normalSpeed = 5f;
+        [SerializeField] private float sandSpeed = 2.5f;
+
+        [HideInInspector] public CharacterController controller;
+        private bool isInSand = false;
+
+        public override void OnStartLocalPlayer()
         {
-            if (isLocalPlayer)
+            controller = GetComponent<CharacterController>();
+            if (controller == null)
             {
-                float h = Input.GetAxis("Horizontal");
-                float v = Input.GetAxis("Vertical");
-                Vector3 playerMovement = new Vector3(h * 0.25f, v * 0.25f, 0);
-                transform.position = transform.position + playerMovement;
+                Debug.LogError("⚠️ Player prefab needs a CharacterController component!");
+                return;
             }
+
+            move.action.Enable();
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
+        private void Update()
+        {
+            if (!isOwned) return; // nebo if (!hasAuthority) return;
+
+
+            Vector2 input = move.action.ReadValue<Vector2>();
+            Vector3 direction = new Vector3(input.x, 0f, input.y).normalized;
+
+            float speed = isInSand ? sandSpeed : normalSpeed;
+
+            Vector3 moveVector = transform.TransformDirection(direction) * speed;
+            controller.SimpleMove(moveVector);
+        }
+
+        // detekce kolize pro CharacterController
+        private void OnControllerColliderHit(ControllerColliderHit hit)
+        {
+            if (hit.collider.CompareTag("Sand"))
+                isInSand = true;
+            else
+                isInSand = false;
         }
     }
 }

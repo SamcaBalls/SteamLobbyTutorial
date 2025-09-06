@@ -1,6 +1,7 @@
 using UnityEngine;
 using Steamworks;
 using System.Collections.Generic;
+using TMPro;
 
 public class LobbyBrowser : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class LobbyBrowser : MonoBehaviour
     private Callback<LobbyDataUpdate_t> lobbyDataUpdateCallback;
 
     private List<CSteamID> currentLobbies = new List<CSteamID>();
+
+    [SerializeField]
+    TMP_Text loadingText;
 
     void Awake()
     {
@@ -39,11 +43,16 @@ public class LobbyBrowser : MonoBehaviour
         Debug.Log("Requesting lobby list...");
         SteamMatchmaking.AddRequestLobbyListStringFilter("game_id", "xXBallerXx", ELobbyComparison.k_ELobbyComparisonEqual);
         SteamAPICall_t call = SteamMatchmaking.RequestLobbyList();
+        loadingText.text = "Refreshing...";
     }
 
     private void OnLobbyMatchList(LobbyMatchList_t result)
     {
         Debug.Log("Found lobbies: " + result.m_nLobbiesMatching);
+        if (result.m_nLobbiesMatching == 0) 
+        {
+            loadingText.text = "No lobbies found";
+        }
         for (int i = 0; i < result.m_nLobbiesMatching; i++)
         {
             CSteamID lobbyID = SteamMatchmaking.GetLobbyByIndex(i);
@@ -63,7 +72,7 @@ public class LobbyBrowser : MonoBehaviour
         string lobbyName = SteamMatchmaking.GetLobbyData(lobbyID, "name");
 
         if (string.IsNullOrEmpty(lobbyName))
-            lobbyName = "Lobby " + lobbyID.m_SteamID;
+            lobbyName = name + "'s lobby";
 
         GameObject newEntry = Instantiate(lobbyPreviewPrefab, contentParent);
         LobbyPreviewUI preview = newEntry.GetComponent<LobbyPreviewUI>();
@@ -80,5 +89,6 @@ public class LobbyBrowser : MonoBehaviour
             Destroy(child.gameObject);
         }
         currentLobbies.Clear();
+        loadingText.text = "Loading";
     }
 }

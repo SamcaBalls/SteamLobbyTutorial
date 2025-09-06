@@ -61,42 +61,65 @@ namespace SteamLobbyTutorial
                 return;
             }
 
-            Debug.Log("Lobby successfully created. Lobby ID: " + callback.m_ulSteamIDLobby);
-            networkManager.StartHost();
-
-            SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAddressKey, SteamUser.GetSteamID().ToString());
-
-            SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "game_id", "xXBallerXx");
             lobbyID = callback.m_ulSteamIDLobby;
+            var lobby = new CSteamID(lobbyID);
+
+            Debug.Log("Lobby successfully created. Lobby ID: " + lobbyID);
+
+            // Nejdøív nastavíme data do lobby
+            SteamMatchmaking.SetLobbyData(lobby, HostAddressKey, SteamUser.GetSteamID().ToString());
+            SteamMatchmaking.SetLobbyData(lobby, "name", SteamFriends.GetPersonaName() + "'s Lobby");
+            SteamMatchmaking.SetLobbyData(lobby, "game_id", "xXBallerXx");
+
+            // Až potom startujeme hosta
+            networkManager.StartHost();
         }
 
         void OnGameLobbyJoinRequested(GameLobbyJoinRequested_t callback)
         {
             Debug.Log("Join request received for lobby: " + callback.m_steamIDLobby);
 
+            // Cleanup
+            if (NetworkServer.active)
+            {
+                NetworkManager.singleton.StopHost();
+            }
             if (NetworkClient.isConnected || NetworkClient.active)
             {
-                Debug.Log("NetworkClient is active or connected. Disconnecting before joining new lobby");
                 NetworkManager.singleton.StopClient();
                 NetworkClient.Shutdown();
             }
+
+            // Pøipojení do lobby
             SteamMatchmaking.JoinLobby(callback.m_steamIDLobby);
         }
+
 
         void OnLobbyEntered(LobbyEnter_t callback)
         {
             if (NetworkServer.active)
             {
-                Debug.Log("Already in a lobby as a host. Ignorning join request");
+                Debug.Log("Already in a lobby as a host. Ignoring join request");
                 return;
             }
+
             lobbyID = callback.m_ulSteamIDLobby;
-            string _hostAddress = SteamMatchmaking.GetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAddressKey);
-            networkManager.networkAddress = _hostAddress;
-            Debug.Log("Entered lobby: " + callback.m_ulSteamIDLobby);
+            var lobby = new CSteamID(lobbyID);
+
+            string hostAddress = SteamMatchmaking.GetLobbyData(lobby, HostAddressKey);
+            if (string.IsNullOrEmpty(hostAddress))
+            {
+                Debug.LogError("No HostAddress found in lobby data!");
+                return;
+            }
+
+            networkManager.networkAddress = hostAddress;
+            Debug.Log("Entered lobby: " + lobbyID);
+
             networkManager.StartClient();
             panelSwapper.SwapPanel("LobbyPanel");
         }
+
 
         void OnLobbyChatUpdate(LobbyChatUpdate_t callback)
         {
