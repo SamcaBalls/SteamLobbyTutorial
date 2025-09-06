@@ -23,6 +23,8 @@ public class CustomNetworkManager : NetworkManager
     public override void Awake()
     {
         base.Awake();
+
+        GetComponent<SteamManager>().enabled = true;
     }
 
     #region Unity Callbacks
