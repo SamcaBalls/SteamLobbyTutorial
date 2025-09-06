@@ -3,6 +3,7 @@ using UnityEngine;
 using Mirror;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 namespace SteamLobbyTutorial
 {
@@ -28,8 +29,18 @@ namespace SteamLobbyTutorial
         public override void OnStartClient()
         {
             base.OnStartClient();
+            StartCoroutine(RegisterPlayerWhenReady());
+        }
+
+        private IEnumerator RegisterPlayerWhenReady()
+        {
+            // poèká, než LobbyUIManager existuje a lobbyID je nastavené
+            while (LobbyUIManager.Instance == null || SteamLobby.Instance.lobbyID == 0)
+                yield return null;
+
             LobbyUIManager.Instance.RegisterPlayer(this);
         }
+
 
         [Command]
         void CmdSetReady()
