@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using Steamworks;
+using TMPro;
 
 namespace SteamLobbyTutorial
 {
@@ -13,6 +14,10 @@ namespace SteamLobbyTutorial
         public ulong lobbyID;
         public NetworkManager networkManager;
         public PanelSwapper panelSwapper;
+        [SerializeField] TMP_Dropdown dropdown;
+        [SerializeField] TMP_InputField inputFieldHost;
+        [SerializeField] TMP_InputField inputFieldClient;
+        bool privateLobby = false;
 
         private Callback<LobbyCreated_t> lobbyCreated;
         private Callback<GameLobbyJoinRequested_t> gameLobbyJoinRequested;
@@ -38,6 +43,7 @@ namespace SteamLobbyTutorial
         {
             networkManager = GetComponentInParent<NetworkManager>();
             panelSwapper.gameObject.SetActive(true);
+            RegisterCallbacks();
             SteamAPI.RunCallbacks();
         }
 
@@ -68,9 +74,11 @@ namespace SteamLobbyTutorial
                 return;
             }
 
-            RegisterCallbacks();
             SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, networkManager.maxConnections);
-            Debug.Log("Požadavek na vytvoøení lobby odeslán");
+
+            Debug.Log(privateLobby
+                ? "Požadavek na vytvoøení PUBLIC lobby s heslem odeslán"
+                : "Požadavek na vytvoøení PUBLIC lobby bez hesla odeslán");
         }
 
         private IEnumerator WaitForSteamAndHost()
@@ -81,7 +89,7 @@ namespace SteamLobbyTutorial
             Debug.Log("Steam inicializován, registruji callbacky a vytváøím lobby");
             RegisterCallbacks();
 
-            SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, networkManager.maxConnections);
+            HostLobby();
         }
 
         void OnLobbyCreated(LobbyCreated_t callback)
@@ -101,8 +109,16 @@ namespace SteamLobbyTutorial
             SteamMatchmaking.SetLobbyData(lobby, "name", SteamFriends.GetPersonaName() + "'s Lobby");
             SteamMatchmaking.SetLobbyData(lobby, "game_id", "xXBallerXx");
 
+            // uložíme jestli má lobby heslo
+            SteamMatchmaking.SetLobbyData(lobby, "private", privateLobby ? "true" : "false");
+            SteamMatchmaking.SetLobbyData(lobby, "password", privateLobby ? inputFieldHost.text : "");
+
             networkManager.StartHost();
+
+            // reset flagu pro jistotu
+            privateLobby = false;
         }
+
 
         void OnGameLobbyJoinRequested(GameLobbyJoinRequested_t callback)
         {
@@ -195,6 +211,14 @@ namespace SteamLobbyTutorial
             panelSwapper.gameObject.SetActive(true);
             this.gameObject.SetActive(true);
             panelSwapper.SwapPanel("MainPanel");
+        }
+
+
+        public void OnDropdownChange()
+        {
+            privateLobby = dropdown.value == 1; 
+            
+            inputFieldHost.interactable = privateLobby;
         }
     }
 }

@@ -1849,8 +1849,9 @@ MonoBehaviour:
   lobbyID: 0
   networkManager: {fileID: 1695253521}
   panelSwapper: {fileID: 580969831}
-  inputField: {fileID: 712015491}
-  joiningWithPassword: 0
+  dropdown: {fileID: 981843537}
+  inputFieldHost: {fileID: 0}
+  inputFieldClient: {fileID: 0}
 --- !u!114 &550017304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3272,10 +3273,10 @@ MonoBehaviour:
       - m_Target: {fileID: 550017303}
         m_TargetAssemblyTypeName: SteamLobbyTutorial.SteamLobby, Assembly-CSharp
         m_MethodName: OnDropdownChange
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 981843537}
-          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_Dropdown, Unity.TextMeshPro
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -3814,7 +3815,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1268316963}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: PasswordUI, Assembly-CSharp
         m_MethodName: OnJoinLobbyClicked
         m_Mode: 1
@@ -4295,14 +4296,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1268316961}
   - component: {fileID: 1268316962}
-  - component: {fileID: 1268316963}
   m_Layer: 5
   m_Name: PasswordEnter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1268316961
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4339,19 +4339,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PanelName: PasswordEnterPanel
---- !u!114 &1268316963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1268316960}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9be1f9cefd508e43a191e0054d7d6a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inputField: {fileID: 2028068061}
 --- !u!1 &1269602677
 GameObject:
   m_ObjectHideFlags: 0
@@ -6638,7 +6625,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1848975514
 RectTransform:
   m_ObjectHideFlags: 0

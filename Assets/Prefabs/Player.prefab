@@ -380,7 +380,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enable: 1
-  _Amplitude: 0.003
+  _Amplitude: 0.0065
   _frequency: 10
   _camera: {fileID: 5778630359370985154}
   _cameraHolder: {fileID: 3307373039759302312}

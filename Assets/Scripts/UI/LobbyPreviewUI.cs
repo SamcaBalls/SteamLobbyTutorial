@@ -17,7 +17,7 @@ public class LobbyPreviewUI : MonoBehaviour
 
     public void OnJoinClicked()
     {
-        Debug.Log("Joining lobby: " + lobbyID);
+        //Tady podmínka
         SteamMatchmaking.JoinLobby(lobbyID);
     }
 }
