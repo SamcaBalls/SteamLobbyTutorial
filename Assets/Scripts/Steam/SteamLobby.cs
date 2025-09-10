@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
@@ -17,6 +17,7 @@ namespace SteamLobbyTutorial
         [SerializeField] TMP_Dropdown dropdown;
         [SerializeField] TMP_InputField inputFieldHost;
         [SerializeField] TMP_InputField inputFieldClient;
+        [SerializeField] PasswordUI passwordUI;
         bool privateLobby = false;
 
         private Callback<LobbyCreated_t> lobbyCreated;
@@ -43,7 +44,6 @@ namespace SteamLobbyTutorial
         {
             networkManager = GetComponentInParent<NetworkManager>();
             panelSwapper.gameObject.SetActive(true);
-            RegisterCallbacks();
             SteamAPI.RunCallbacks();
         }
 
@@ -59,7 +59,7 @@ namespace SteamLobbyTutorial
             lobbyChatUpdate = Callback<LobbyChatUpdate_t>.Create(OnLobbyChatUpdate);
 
             callbacksRegistered = true;
-            Debug.Log("Steam callbacky registrovanÈ");
+            Debug.Log("Steam callbacky registrovan√©");
         }
 
         public void HostLobby()
@@ -74,11 +74,13 @@ namespace SteamLobbyTutorial
                 return;
             }
 
+            RegisterCallbacks();
+
             SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, networkManager.maxConnections);
 
             Debug.Log(privateLobby
-                ? "Poûadavek na vytvo¯enÌ PUBLIC lobby s heslem odesl·n"
-                : "Poûadavek na vytvo¯enÌ PUBLIC lobby bez hesla odesl·n");
+                ? "Po≈æadavek na vytvo≈ôen√≠ PUBLIC lobby s heslem odesl√°n"
+                : "Po≈æadavek na vytvo≈ôen√≠ PUBLIC lobby bez hesla odesl√°n");
         }
 
         private IEnumerator WaitForSteamAndHost()
@@ -86,7 +88,7 @@ namespace SteamLobbyTutorial
             while (!SteamManager.Initialized)
                 yield return null;
 
-            Debug.Log("Steam inicializov·n, registruji callbacky a vytv·¯Ìm lobby");
+            Debug.Log("Steam inicializov√°n, registruji callbacky a vytv√°≈ô√≠m lobby");
             RegisterCallbacks();
 
             HostLobby();
@@ -96,20 +98,20 @@ namespace SteamLobbyTutorial
         {
             if (callback.m_eResult != EResult.k_EResultOK)
             {
-                Debug.LogError("Nepoda¯ilo se vytvo¯it lobby: " + callback.m_eResult);
+                Debug.LogError("Nepoda≈ôilo se vytvo≈ôit lobby: " + callback.m_eResult);
                 return;
             }
 
             lobbyID = callback.m_ulSteamIDLobby;
             var lobby = new CSteamID(lobbyID);
 
-            Debug.Log("Lobby vytvo¯eno. ID: " + lobbyID);
+            Debug.Log("Lobby vytvo≈ôeno. ID: " + lobbyID);
 
             SteamMatchmaking.SetLobbyData(lobby, HostAddressKey, SteamUser.GetSteamID().ToString());
             SteamMatchmaking.SetLobbyData(lobby, "name", SteamFriends.GetPersonaName() + "'s Lobby");
             SteamMatchmaking.SetLobbyData(lobby, "game_id", "xXBallerXx");
 
-            // uloûÌme jestli m· lobby heslo
+            // ulo≈æ√≠me jestli m√° lobby heslo
             SteamMatchmaking.SetLobbyData(lobby, "private", privateLobby ? "true" : "false");
             SteamMatchmaking.SetLobbyData(lobby, "password", privateLobby ? inputFieldHost.text : "");
 
@@ -184,7 +186,7 @@ namespace SteamLobbyTutorial
         {
             if (LobbyUIManager.Instance == null)
             {
-                Debug.LogWarning("Lobby UI Manager.Instance je null, p¯eskoËeno");
+                Debug.LogWarning("Lobby UI Manager.Instance je null, p≈ôeskoƒçeno");
                 yield break;
             }
             yield return new WaitForSeconds(delay);
@@ -220,5 +222,32 @@ namespace SteamLobbyTutorial
             
             inputFieldHost.interactable = privateLobby;
         }
+
+        public void JoinLobby(CSteamID targetLobbyID)
+        {
+            string password = SteamMatchmaking.GetLobbyData(targetLobbyID, "password");
+
+            if (!string.IsNullOrEmpty(password))
+            {
+                if(inputFieldClient.text != password)
+                {
+                    Debug.Log("Lobby m√° heslo ‚Üí otev√≠r√°m PasswordPanel");
+                    passwordUI.SetLobbyInfo(targetLobbyID);
+                    panelSwapper.SwapPanel("PasswordEnterPanel");
+                }
+                else
+                {
+                    RegisterCallbacks();
+                    SteamMatchmaking.JoinLobby(targetLobbyID);
+                }
+
+            }
+            else
+            {
+                Debug.Log("Lobby nem√° heslo ‚Üí rovnou join");
+                SteamMatchmaking.JoinLobby(targetLobbyID);
+            }
+        }
+
     }
 }

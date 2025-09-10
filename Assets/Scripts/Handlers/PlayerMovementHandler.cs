@@ -13,6 +13,8 @@ namespace SteamLobbyTutorial
         [SerializeField] private float normalSpeed = 5f;
         [SerializeField] private float sandSpeed = 2.5f;
 
+        [HideInInspector] public float moveSpeed = 0;
+
         [HideInInspector] public CharacterController controller;
         private bool isInSand = false;
 
@@ -37,9 +39,9 @@ namespace SteamLobbyTutorial
             Vector2 input = move.action.ReadValue<Vector2>();
             Vector3 direction = new Vector3(input.x, 0f, input.y).normalized;
 
-            float speed = isInSand ? sandSpeed : normalSpeed;
+            moveSpeed = isInSand ? sandSpeed : normalSpeed;
 
-            Vector3 moveVector = transform.TransformDirection(direction) * speed;
+            Vector3 moveVector = transform.TransformDirection(direction) * moveSpeed;
             controller.SimpleMove(moveVector);
         }
 

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Steamworks;
 using TMPro;
+using SteamLobbyTutorial;
 
 public class LobbyPreviewUI : MonoBehaviour
 {
@@ -17,7 +18,6 @@ public class LobbyPreviewUI : MonoBehaviour
 
     public void OnJoinClicked()
     {
-        //Tady podmínka
-        SteamMatchmaking.JoinLobby(lobbyID);
+        SteamLobby.Instance.JoinLobby(lobbyID);
     }
 }
