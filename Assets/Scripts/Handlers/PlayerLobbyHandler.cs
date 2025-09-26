@@ -5,8 +5,6 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 
-namespace SteamLobbyTutorial
-{
     public class PlayerLobbyHandler : NetworkBehaviour
     {
         [SyncVar(hook = nameof(OnReadyStatusChanged))]
@@ -80,5 +78,3 @@ namespace SteamLobbyTutorial
             }
         }
     }
-
-}

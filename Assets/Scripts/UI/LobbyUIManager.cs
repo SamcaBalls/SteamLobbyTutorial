@@ -6,8 +6,6 @@ using UnityEngine.UI;
 using System.Collections;
 using Steamworks;
 
-namespace SteamLobbyTutorial
-{
     public class LobbyUIManager : NetworkBehaviour
     {
         public static LobbyUIManager Instance;
@@ -119,4 +117,3 @@ namespace SteamLobbyTutorial
         }
 
     }
-}

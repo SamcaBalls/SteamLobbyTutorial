@@ -5,11 +5,15 @@ using Mirror;
 using Steamworks;
 using TMPro;
 
-namespace SteamLobbyTutorial
-{
     public class SteamLobby : NetworkBehaviour
     {
-        public static SteamLobby Instance;
+        private static SteamLobby instance;
+        public static SteamLobby Instance {
+            get { if (instance == null)
+                    instance = FindAnyObjectByType<SteamLobby>(FindObjectsInactive.Include); 
+                return instance;
+            } 
+        }
         public GameObject hostButton = null;
         public ulong lobbyID;
         public NetworkManager networkManager;
@@ -31,8 +35,8 @@ namespace SteamLobbyTutorial
 
         void Awake()
         {
-            if (Instance == null)
-                Instance = this;
+            if (instance == null)
+                instance = this;
             else if (Instance != this)
             {
                 Destroy(gameObject);
@@ -83,7 +87,7 @@ namespace SteamLobbyTutorial
                 : "Požadavek na vytvoření PUBLIC lobby bez hesla odeslán");
         }
 
-        private IEnumerator WaitForSteamAndHost()
+        public IEnumerator WaitForSteamAndHost()
         {
             while (!SteamManager.Initialized)
                 yield return null;
@@ -250,4 +254,3 @@ namespace SteamLobbyTutorial
         }
 
     }
-}

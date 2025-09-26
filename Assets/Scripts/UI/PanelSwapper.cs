@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SteamLobbyTutorial
-{
     public class PanelSwapper : MonoBehaviour
     {
         public List<Panel> panels = new List<Panel>();
@@ -22,4 +20,3 @@ namespace SteamLobbyTutorial
             }
         }
     }
-}
